@@ -143,6 +143,18 @@ public static class ArgumentDefinitions
         );
     }
 
+    public static class Datadog
+    {
+        public const string DatadogResourceName = "datadog-resource";
+
+        public static readonly ArgumentDefinition<string> DatadogResource = new(
+            DatadogResourceName,
+            "The name of the datadog resource.",
+            required: true
+        );
+
+    }
+
     public static class Monitor
     {
         public const string WorkspaceIdOrName = "workspace";

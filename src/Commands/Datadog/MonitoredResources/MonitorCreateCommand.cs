@@ -21,8 +21,8 @@ public sealed class MonitorCreateCommand(ILogger<MonitorCreateCommand> logger) :
 
     protected override string GetCommandDescription() =>
         $"""
-        Creates a new Datadog monitor in the specified resource group and location.
-        The command requires the monitor name, resource group, location, API key, and application key as inputs.
+        Creates a new Datadog monitor.
+        The command requires the monitor name, location, API key, and application key as inputs.
         The required parameters to be taken as input from the user are {ArgumentDefinitions.Datadog.MonitorName}, {ArgumentDefinitions.Datadog.Location}, {ArgumentDefinitions.Datadog.ApiKey}, and {ArgumentDefinitions.Datadog.ApplicationKey}.
         The command will create a new Datadog monitor with the specified parameters.
         """;

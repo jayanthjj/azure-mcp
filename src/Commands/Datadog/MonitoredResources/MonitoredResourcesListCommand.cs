@@ -18,20 +18,20 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
     //     "Lists monitored resources in Datadog for a datadog resource";
 
     protected override string GetCommandDescription() =>
-    $"""Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatabaseResource}.""";
+    $"""Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}.""";
 
-    protected readonly Option<string> _databaseResourceOption = ArgumentDefinitions.Datadog.DatabaseResource.ToOption();
+    protected readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
 
     protected override void RegisterOptions(Command command)
     {
         base.RegisterOptions(command);
-        command.AddOption(_databaseResourceOption);
+        command.AddOption(_datadogResourceOption);
     }
 
     protected override MonitoredResourcesListArguments BindArguments(ParseResult parseResult)
     {
         var args = base.BindArguments(parseResult);
-        args.DatabaseResource = parseResult.GetValueForOption(_databaseResourceOption);
+        args.Datadog = parseResult.GetValueForOption(_datadogResourceOption);
         return args;
     }
 
@@ -50,7 +50,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             var results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
-                args.DatabaseResource);
+                args.Datadog!);
 
             context.Response.Results = results?.Count > 0 ? new { results } : null;
         }
@@ -70,7 +70,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatabaseResourceArgument() =>
         ArgumentBuilder<MonitoredResourcesListArguments>
-            .Create(ArgumentDefinitions.Datadog.DatabaseResource.Name, ArgumentDefinitions.Datadog.DatabaseResource.Description)
-            .WithValueAccessor(args => args.DatabaseResource ?? string.Empty)
+            .Create(ArgumentDefinitions.Datadog.DatadogResource.Name, ArgumentDefinitions.Datadog.DatadogResource.Description)
+            .WithValueAccessor(args => args.Datadog ?? string.Empty)
             .WithIsRequired(true);
 }

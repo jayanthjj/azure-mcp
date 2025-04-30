@@ -289,11 +289,39 @@ public static class ArgumentDefinitions
 
     public static class Datadog
     {
-        public const string DatabaseResourceName = "database-resource";
+        public const string DatadogResourceName = "database-resource";
+        public const string MonitorResourceName = "monitor-resource";
+        public const string LocationName = "location";
+        public const string ApiKeyName = "api-key";
+        public const string ApplicationKeyName = "application-key";
 
-        public static readonly ArgumentDefinition<string> DatabaseResource = new(
-            DatabaseResourceName,
+        public static readonly ArgumentDefinition<string> DatadogResource = new(
+            DatadogResourceName,
             "The name of the Datadog database resource to query.",
+            required: true
+        );
+
+        public static readonly ArgumentDefinition<string> ApiKey = new(
+            ApiKeyName,
+            "The API key for Datadog organization properties.",
+            required: true
+        );
+
+        public static readonly ArgumentDefinition<string> ApplicationKey = new(
+            ApplicationKeyName,
+            "The application key for Datadog organization properties.",
+            required: true
+        );
+
+        public static readonly ArgumentDefinition<string> MonitorName = new(
+           MonitorResourceName,
+            "The name of the Datadog monitor to create.",
+            required: true
+        );
+
+        public static readonly ArgumentDefinition<string> Location = new(
+            LocationName,
+            "The location of the Datadog monitor to create.",
             required: true
         );
     }

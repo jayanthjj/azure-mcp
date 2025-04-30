@@ -166,6 +166,12 @@ public class CommandFactory
         datadog.AddSubGroup(monitoredResources);
 
         monitoredResources.AddCommand("list", new Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<Datadog.MonitoredResources.MonitoredResourcesListCommand>()));
+
+        // Add monitor create command
+        var monitor = new CommandGroup("monitor", "Datadog monitor operations - Commands for creating and managing Datadog monitors.");
+        datadog.AddSubGroup(monitor);
+
+        monitor.AddCommand("create", new Datadog.MonitoredResources.MonitorCreateCommand(GetLogger<Datadog.MonitoredResources.MonitorCreateCommand>()));
     }
 
     private void RegisterAppConfigCommands()

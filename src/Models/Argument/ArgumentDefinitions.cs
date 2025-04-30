@@ -297,7 +297,7 @@ public static class ArgumentDefinitions
 
         public static readonly ArgumentDefinition<string> DatadogResource = new(
             DatadogResourceName,
-            "The name of the Datadog database resource to query.",
+            "The name of the Datadog resource to query.",
             required: true
         );
 

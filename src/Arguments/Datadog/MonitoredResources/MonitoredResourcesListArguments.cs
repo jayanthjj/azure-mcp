@@ -2,5 +2,5 @@ namespace AzureMcp.Arguments.Datadog.MonitoredResources;
 
 public class MonitoredResourcesListArguments : SubscriptionArguments
 {
-    public string? Datadog { get; set; }
+    public string? DatadogResource { get; set; }
 }

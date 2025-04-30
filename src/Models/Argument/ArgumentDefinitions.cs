@@ -286,4 +286,15 @@ public static class ArgumentDefinitions
             );
         }
     }
+
+    public static class Datadog
+    {
+        public const string DatabaseResourceName = "database-resource";
+
+        public static readonly ArgumentDefinition<string> DatabaseResource = new(
+            DatabaseResourceName,
+            "The name of the Datadog database resource to query.",
+            required: true
+        );
+    }
 }

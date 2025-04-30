@@ -5,28 +5,33 @@ using AzureMcp.Services.Interfaces;
 using AzureMcp.Commands;
 using Microsoft.Extensions.Logging;
 using AzureMcp.Arguments.Datadog.MonitoredResources;
+using AzureMcp.Models.Argument;
 
 namespace AzureMcp.Commands.Datadog.MonitoredResources;
 
 public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
 {
-    private readonly Option<string> _resourceGroupOption = new Option<string>("--resource-group", "The resource group name.");
 
     protected override string GetCommandName() => "list";
 
+    // protected override string GetCommandDescription() =>
+    //     "Lists monitored resources in Datadog for a datadog resource";
+
     protected override string GetCommandDescription() =>
-        "Lists monitored resources in Datadog for a specific resource group.";
+    $"""Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatabaseResource}.""";
+
+    protected readonly Option<string> _databaseResourceOption = ArgumentDefinitions.Datadog.DatabaseResource.ToOption();
 
     protected override void RegisterOptions(Command command)
     {
         base.RegisterOptions(command);
-        command.AddOption(_resourceGroupOption);
+        command.AddOption(_databaseResourceOption);
     }
 
     protected override MonitoredResourcesListArguments BindArguments(ParseResult parseResult)
     {
         var args = base.BindArguments(parseResult);
-        args.ResourceGroup = parseResult.GetValueForOption(_resourceGroupOption);
+        args.DatabaseResource = parseResult.GetValueForOption(_databaseResourceOption);
         return args;
     }
 
@@ -36,8 +41,16 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
         try
         {
+            if (!await ProcessArguments(context, args))
+            {
+                return context.Response;
+            }
+
             var service = context.GetService<IDatadogService>();
-            var results = await service.ListMonitoredResources(args.ResourceGroup, args.Subscription!, "DatadogResourceName");
+            var results = await service.ListMonitoredResources(
+                args.ResourceGroup!,
+                args.Subscription!,
+                args.DatabaseResource);
 
             context.Response.Results = results?.Count > 0 ? new { results } : null;
         }
@@ -49,8 +62,15 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
         return context.Response;
     }
 
-    private void HandleException(CommandResponse response, Exception ex)
+    protected override void RegisterArguments()
     {
-        throw new NotImplementedException();
+        base.RegisterArguments();
+        AddArgument(CreateDatabaseResourceArgument());
     }
+
+    private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatabaseResourceArgument() =>
+        ArgumentBuilder<MonitoredResourcesListArguments>
+            .Create(ArgumentDefinitions.Datadog.DatabaseResource.Name, ArgumentDefinitions.Datadog.DatabaseResource.Description)
+            .WithValueAccessor(args => args.DatabaseResource ?? string.Empty)
+            .WithIsRequired(true);
 }

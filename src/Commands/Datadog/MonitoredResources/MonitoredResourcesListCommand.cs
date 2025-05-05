@@ -14,11 +14,10 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     protected override string GetCommandName() => "list";
 
-    // protected override string GetCommandDescription() =>
-    //     "Lists monitored resources in Datadog for a datadog resource";
-
     protected override string GetCommandDescription() =>
-    $"""Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}. The command will display the top 20 monitored resources by default and provide an option to view the rest if requested.""";
+    $"""
+    List monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}. 
+    """;
 
     protected readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
 

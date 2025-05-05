@@ -67,11 +67,11 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
     protected override void RegisterArguments()
     {
         base.RegisterArguments();
-        AddArgument(CreateDatabaseResourceArgument());
+        AddArgument(CreateDatadogResourceArgument());
         AddArgument(CreateResourceGroupArgument());
     }
 
-    private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatabaseResourceArgument() =>
+    private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatadogResourceArgument() =>
         ArgumentBuilder<MonitoredResourcesListArguments>
             .Create(ArgumentDefinitions.Datadog.DatadogResource.Name, ArgumentDefinitions.Datadog.DatadogResource.Description)
             .WithValueAccessor(args => args.DatadogResource ?? string.Empty)

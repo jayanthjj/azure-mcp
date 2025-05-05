@@ -76,6 +76,7 @@ public class CommandFactory
         RegisterStorageCommands();
         RegisterMonitorCommands();
         RegisterAppConfigCommands();
+        RegisterDatadogCommands();
         RegisterSearchCommands();
         RegisterToolsCommands();
         RegisterExtensionCommands();
@@ -206,6 +207,17 @@ public class CommandFactory
         index.AddCommand("list", new Search.Index.IndexListCommand(GetLogger<Search.Index.IndexListCommand>()));
         index.AddCommand("describe", new Search.Index.IndexDescribeCommand(GetLogger<Search.Index.IndexDescribeCommand>()));
         index.AddCommand("query", new Search.Index.IndexQueryCommand(GetLogger<Search.Index.IndexQueryCommand>()));
+    }
+
+    private void RegisterDatadogCommands()
+    {
+        var datadog = new CommandGroup("datadog", "Datadog operations - Commands for managing and querying Datadog monitored resources.");
+        _rootGroup.AddSubGroup(datadog);
+
+        var monitoredResources = new CommandGroup("monitored-resources", "Datadog monitored resources operations - Commands for listing monitored resources in Datadog.");
+        datadog.AddSubGroup(monitoredResources);
+
+        monitoredResources.AddCommand("list", new Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<Datadog.MonitoredResources.MonitoredResourcesListCommand>()));
     }
 
     private void RegisterToolsCommands()

@@ -148,6 +148,18 @@ public static class ArgumentDefinitions
         );
     }
 
+    public static class Datadog
+    {
+        public const string DatadogResourceName = "datadog-resource";
+
+        public static readonly ArgumentDefinition<string> DatadogResource = new(
+            DatadogResourceName,
+            "The name of the Datadog resource to query.",
+            required: true
+        );
+
+    }
+
     public static class Search
     {
         public const string ServiceName = "service-name";

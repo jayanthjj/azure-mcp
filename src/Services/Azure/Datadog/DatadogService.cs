@@ -1,7 +1,7 @@
-using AzureMcp.Services.Interfaces;
-using Azure.ResourceManager.Datadog;
-using System.Text.Json;
 using Azure.Core;
+using Azure.ResourceManager.Datadog;
+using AzureMcp.Services.Interfaces;
+using System.Text.Json;
 
 namespace AzureMcp.Services.Azure.Datadog;
 

@@ -1,31 +1,43 @@
-using System.CommandLine;
-using System.CommandLine.Parsing;
+using AzureMcp.Arguments.Datadog.MonitoredResources;
+using AzureMcp.Commands;
+using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
-using AzureMcp.Commands;
 using Microsoft.Extensions.Logging;
-using AzureMcp.Arguments.Datadog.MonitoredResources;
-using AzureMcp.Models.Argument;
+using System.CommandLine;
+using System.CommandLine.Parsing;
 
 namespace AzureMcp.Commands.Datadog.MonitoredResources;
 
 public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
 {
+    private readonly ILogger<MonitoredResourcesListCommand> _logger = logger;
 
     protected override string GetCommandName() => "list";
 
     protected override string GetCommandDescription() =>
     $"""
     List monitored resources in Datadog for a datadog resource taken as input from the user.
+
+       Required arguments:
+       - subscription: The name of the Azure subscription
+       - resource-group: The name of the Azure resource group
+       - datadog-resource: The name of the Datadog resource
     """;
 
-    protected readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
+    private readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
 
     protected override void RegisterOptions(Command command)
     {
         base.RegisterOptions(command);
         command.AddOption(_datadogResourceOption);
         command.AddOption(_resourceGroupOption);
+    }
+    protected override void RegisterArguments()
+    {
+        base.RegisterArguments();
+        AddArgument(CreateDatadogResourceArgument());
+        AddArgument(CreateResourceGroupArgument());
     }
 
     protected override MonitoredResourcesListArguments BindArguments(ParseResult parseResult)
@@ -57,17 +69,11 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "An error occurred while executing the command.");
             HandleException(context.Response, ex);
         }
 
         return context.Response;
-    }
-
-    protected override void RegisterArguments()
-    {
-        base.RegisterArguments();
-        AddArgument(CreateDatadogResourceArgument());
-        AddArgument(CreateResourceGroupArgument());
     }
 
     private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatadogResourceArgument() =>

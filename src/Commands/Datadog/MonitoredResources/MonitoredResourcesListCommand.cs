@@ -52,7 +52,6 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             var results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
-                args.Tenant!,
                 args.DatadogResource);
 
             context.Response.Results = results?.Count > 0 ? results : null;

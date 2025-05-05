@@ -11,10 +11,10 @@ public partial class DatadogService : BaseAzureService, IDatadogService
     {
     }
 
-    public async Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string tenant, string datadogResource)
+    public async Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
     {
         // Resolve the tenant ID for the given subscription
-        var tenantId = await ResolveTenantIdAsync(tenant);
+        var tenantId = await ResolveTenantIdAsync(null);
 
         // Create an authenticated client for the DatadogMonitorResource
         var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);

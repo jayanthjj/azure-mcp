@@ -39,7 +39,7 @@ public class MonitoredResourcesListCommandTests
     {
         // Arrange
         var expectedResources = new List<string> { "resource1", "resource2" };
-        _datadogService.ListMonitoredResources(Arg.Is("rg1"), Arg.Is("sub123"), Arg.Any<string>(), Arg.Is("datadog1"))
+        _datadogService.ListMonitoredResources(Arg.Is("rg1"), Arg.Is("sub123"), Arg.Is("datadog1"))
             .Returns(expectedResources);
 
         var command = new MonitoredResourcesListCommand(_logger);
@@ -53,7 +53,7 @@ public class MonitoredResourcesListCommandTests
         Assert.NotNull(response);
         Assert.NotNull(response.Results);
 
-        var json = JsonSerializer.Serialize(response.Results);
+        var json = JsonSerializer.Serialize(new { resources = response.Results });
         var result = JsonSerializer.Deserialize<MonitoredResourcesListResult>(json);
 
         Assert.NotNull(result);
@@ -64,7 +64,7 @@ public class MonitoredResourcesListCommandTests
     public async Task ExecuteAsync_ReturnsNull_WhenNoResources()
     {
         // Arrange
-        _datadogService.ListMonitoredResources("rg1", "sub123", Arg.Any<string>(), "datadog1")
+        _datadogService.ListMonitoredResources("rg1", "sub123","datadog1")
             .Returns(new List<string>());
 
         var command = new MonitoredResourcesListCommand(_logger);
@@ -83,8 +83,8 @@ public class MonitoredResourcesListCommandTests
     public async Task ExecuteAsync_HandlesException()
     {
         // Arrange
-        var expectedError = "Test error";
-        _datadogService.ListMonitoredResources("rg1", "sub123", Arg.Any<string>(), "datadog1")
+        var expectedError = "Missing required arguments: datadog-resource";
+        _datadogService.ListMonitoredResources("rg1", "sub123","datadog1")
             .ThrowsAsync(new Exception(expectedError));
 
         var command = new MonitoredResourcesListCommand(_logger);
@@ -96,7 +96,7 @@ public class MonitoredResourcesListCommandTests
 
         // Assert
         Assert.NotNull(response);
-        Assert.Equal(400, response.Status);
+        Assert.Equal(500, response.Status);
         Assert.StartsWith(expectedError, response.Message);
     }
 

@@ -289,7 +289,7 @@ public static class ArgumentDefinitions
 
     public static class Datadog
     {
-        public const string DatadogResourceName = "database-resource";
+        public const string DatadogResourceName = "datadog-resource";
         public const string MonitorResourceName = "monitor-resource";
         public const string LocationName = "location";
         public const string ApiKeyName = "api-key";

@@ -1,5 +1,5 @@
-﻿using AzureMcp.Models.Argument;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using AzureMcp.Models.Argument;
 
 namespace AzureMcp.Arguments.Datadog.MonitoredResources;
 

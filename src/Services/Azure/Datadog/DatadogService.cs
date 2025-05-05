@@ -25,7 +25,7 @@ public partial class DatadogService : BaseAzureService, IDatadogService
         foreach (var resource in monitoredResources)
         {
             var resourceIdSegments = resource.Id.ToString().Split('/');
-            var lastSegment = resourceIdSegments[^1]; // Using ^1 to get the last element
+            var lastSegment = resourceIdSegments[^1];
             resourceList.Add(lastSegment);
         }
 

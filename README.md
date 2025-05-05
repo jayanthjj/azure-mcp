@@ -89,6 +89,9 @@ The Azure MCP Server provides tools for interacting with the following Azure ser
 - JSON output formatting
 - Cross-platform compatibility
 
+### 🔧 Azure Native ISV Services
+- List Monitored Resources in a Datadog Instance
+
 ### 🚀 Azure Developer CLI (azd) Extension
 - Execute Azure Developer CLI commands directly
 - Support for template discovery, template initialization, provisioning and deployment

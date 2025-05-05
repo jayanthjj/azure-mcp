@@ -1,10 +1,10 @@
-﻿using AzureMcp.Arguments.Datadog.MonitoredResources;
+﻿using System.CommandLine;
+using System.CommandLine.Parsing;
+using AzureMcp.Arguments.Datadog.MonitoredResources;
 using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.CommandLine;
-using System.CommandLine.Parsing;
 
 namespace AzureMcp.Commands.Datadog.MonitoredResources;
 
@@ -63,8 +63,8 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
                 args.Subscription!,
                 args.DatadogResource!);
 
-            context.Response.Results = results?.Count > 0 ? 
-                ResponseResult.Create(new MonitoredResourcesListResult(results), 
+            context.Response.Results = results?.Count > 0 ?
+                ResponseResult.Create(new MonitoredResourcesListResult(results),
                 DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
         }
         catch (Exception ex)

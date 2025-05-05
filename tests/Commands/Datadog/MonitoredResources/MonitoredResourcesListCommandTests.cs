@@ -1,0 +1,108 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+using AzureMcp.Arguments.Datadog.MonitoredResources;
+using AzureMcp.Commands.Datadog.MonitoredResources;
+using AzureMcp.Models.Command;
+using AzureMcp.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using System.CommandLine;
+using System.CommandLine.Parsing;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Xunit;
+
+namespace AzureMcp.Tests.Commands.Datadog.MonitoredResources;
+
+public class MonitoredResourcesListCommandTests
+{
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IDatadogService _datadogService;
+    private readonly ILogger<MonitoredResourcesListCommand> _logger;
+
+    public MonitoredResourcesListCommandTests()
+    {
+        _datadogService = Substitute.For<IDatadogService>();
+        _logger = Substitute.For<ILogger<MonitoredResourcesListCommand>>();
+
+        var collection = new ServiceCollection();
+        collection.AddSingleton(_datadogService);
+
+        _serviceProvider = collection.BuildServiceProvider();
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ReturnsResources_WhenResourcesExist()
+    {
+        // Arrange
+        var expectedResources = new List<string> { "resource1", "resource2" };
+        _datadogService.ListMonitoredResources(Arg.Is("rg1"), Arg.Is("sub123"), Arg.Any<string>(), Arg.Is("datadog1"))
+            .Returns(expectedResources);
+
+        var command = new MonitoredResourcesListCommand(_logger);
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
+        var context = new CommandContext(_serviceProvider);
+
+        // Act
+        var response = await command.ExecuteAsync(context, args);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.NotNull(response.Results);
+
+        var json = JsonSerializer.Serialize(response.Results);
+        var result = JsonSerializer.Deserialize<MonitoredResourcesListResult>(json);
+
+        Assert.NotNull(result);
+        Assert.Equal(expectedResources, result.Resources);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ReturnsNull_WhenNoResources()
+    {
+        // Arrange
+        _datadogService.ListMonitoredResources("rg1", "sub123", Arg.Any<string>(), "datadog1")
+            .Returns(new List<string>());
+
+        var command = new MonitoredResourcesListCommand(_logger);
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
+        var context = new CommandContext(_serviceProvider);
+
+        // Act
+        var response = await command.ExecuteAsync(context, args);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Null(response.Results);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_HandlesException()
+    {
+        // Arrange
+        var expectedError = "Test error";
+        _datadogService.ListMonitoredResources("rg1", "sub123", Arg.Any<string>(), "datadog1")
+            .ThrowsAsync(new Exception(expectedError));
+
+        var command = new MonitoredResourcesListCommand(_logger);
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
+        var context = new CommandContext(_serviceProvider);
+
+        // Act
+        var response = await command.ExecuteAsync(context, args);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(400, response.Status);
+        Assert.StartsWith(expectedError, response.Message);
+    }
+
+    private class MonitoredResourcesListResult
+    {
+        [JsonPropertyName("resources")]
+        public List<string> Resources { get; set; } = new();
+    }
+}

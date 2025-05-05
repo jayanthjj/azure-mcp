@@ -1,7 +1,7 @@
-using AzureMcp.Services.Interfaces;
-using Azure.ResourceManager.Datadog;
-using System.Text.Json;
 using Azure.Core;
+using Azure.ResourceManager.Datadog;
+using AzureMcp.Services.Interfaces;
+using System.Text.Json;
 
 namespace AzureMcp.Services.Azure.Datadog;
 
@@ -39,19 +39,5 @@ public partial class DatadogService : BaseAzureService, IDatadogService
         }
 
         return resourceList;
-    }
-
-    public Task<List<string>> CreateMonitor(string subscription, string monitorName, string resourceGroup, string location, string apiKey, string applicationKey)
-    {
-        Task.Delay(1000).Wait(); // Simulate some delay for the sake of example
-        return Task.FromResult(new List<string> { subscription, monitorName, resourceGroup, location, apiKey, applicationKey });
-        //var command = $"az datadog monitor create --name {monitorName} --resource-group {resourceGroup} --location {location} --datadog-organization-properties api-key={apiKey} application-key={applicationKey}";
-
-        //var result = await _processService.ExecuteAsync("az", command, 300);
-
-        //if (result.ExitCode != 0)
-        //{
-        //    throw new Exception($"Failed to create monitor: {result.Error}");
-        //}
     }
 }

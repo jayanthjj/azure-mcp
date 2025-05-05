@@ -1,11 +1,11 @@
-using System.CommandLine;
-using System.CommandLine.Parsing;
+using AzureMcp.Arguments.Datadog.MonitoredResources;
+using AzureMcp.Commands;
+using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
-using AzureMcp.Commands;
 using Microsoft.Extensions.Logging;
-using AzureMcp.Arguments.Datadog.MonitoredResources;
-using AzureMcp.Models.Argument;
+using System.CommandLine;
+using System.CommandLine.Parsing;
 
 namespace AzureMcp.Commands.Datadog.MonitoredResources;
 
@@ -14,11 +14,11 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     protected override string GetCommandName() => "list";
 
-    // protected override string GetCommandDescription() =>
-    //     "Lists monitored resources in Datadog for a datadog resource";
-
     protected override string GetCommandDescription() =>
-    $"""Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}. The command will display the top 20 monitored resources by default and provide an option to view the rest if requested.""";
+    $"""
+    Lists monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}. 
+    The command will display the top 20 monitored resources by default and provide an option to view the rest if requested.
+    """;
 
     protected readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
 
@@ -52,7 +52,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             var results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
-                args.Tenant,
+                args.Tenant!,
                 args.DatadogResource);
 
             context.Response.Results = results?.Count > 0 ? results : null;

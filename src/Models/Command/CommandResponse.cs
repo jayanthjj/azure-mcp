@@ -44,6 +44,11 @@ public sealed class ResponseResult
     {
         JsonSerializer.Serialize(writer, _result, _typeInfo);
     }
+
+    public static implicit operator ResponseResult?(List<string>? v)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 internal class ResultConverter : JsonConverter<ResponseResult>

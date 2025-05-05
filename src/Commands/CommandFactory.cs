@@ -73,6 +73,7 @@ public class CommandFactory
     {
         // Register top-level command groups
         RegisterCosmosCommands();
+        RegisterDatadogCommands();
         RegisterStorageCommands();
         RegisterMonitorCommands();
         RegisterAppConfigCommands();
@@ -109,6 +110,19 @@ public class CommandFactory
         cosmosContainer.AddCommand("list", new Cosmos.ContainerListCommand(GetLogger<Cosmos.ContainerListCommand>()));
         cosmosAccount.AddCommand("list", new Cosmos.AccountListCommand(GetLogger<Cosmos.AccountListCommand>()));
         cosmosItem.AddCommand("query", new ItemQueryCommand(GetLogger<ItemQueryCommand>()));
+    }
+
+    private void RegisterDatadogCommands()
+    {
+        // Create Datadog command group
+        var datadog = new CommandGroup("datadog", "Datadog operations - Commands for managing and querying Datadog monitored resources.");
+        _rootGroup.AddSubGroup(datadog);
+
+        // Create monitored-resources subgroup
+        var monitoredResources = new CommandGroup("monitored-resources", "Datadog monitored resources operations - Commands for listing monitored resources in Datadog.");
+        datadog.AddSubGroup(monitoredResources);
+
+        monitoredResources.AddCommand("list", new Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<Datadog.MonitoredResources.MonitoredResourcesListCommand>()));
     }
 
     private void RegisterStorageCommands()

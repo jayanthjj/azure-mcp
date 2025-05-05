@@ -9,6 +9,7 @@ using AzureMcp.Models;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Azure.AppConfig;
 using AzureMcp.Services.Azure.Cosmos;
+using AzureMcp.Services.Azure.Datadog;
 using AzureMcp.Services.Azure.Monitor;
 using AzureMcp.Services.Azure.ResourceGroup;
 using AzureMcp.Services.Azure.Search;
@@ -59,6 +60,7 @@ static void ConfigureServices(IServiceCollection services)
     services.AddSingleton<ISubscriptionService, SubscriptionService>();
     services.AddSingleton<ITenantService, TenantService>();
     services.AddSingleton<ICosmosService, CosmosService>();
+    services.AddSingleton<IDatadogService, DatadogService>();
     services.AddSingleton<IStorageService, StorageService>();
     services.AddSingleton<IMonitorService, MonitorService>();
     services.AddSingleton<IResourceGroupService, ResourceGroupService>();

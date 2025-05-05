@@ -16,7 +16,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     protected override string GetCommandDescription() =>
     $"""
-    List monitored resources in Datadog for a datadog resource taken as input from the user in {ArgumentDefinitions.Datadog.DatadogResource}. 
+    List monitored resources in Datadog for a datadog resource taken as input from the user.
     """;
 
     protected readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
@@ -51,8 +51,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             var results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
-                args.Tenant,
-                args.DatadogResource);
+                args.DatadogResource!);
 
             context.Response.Results = results?.Count > 0 ? results : null;
         }

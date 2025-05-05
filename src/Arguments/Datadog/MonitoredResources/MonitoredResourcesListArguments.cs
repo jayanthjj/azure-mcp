@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace AzureMcp.Arguments.Datadog.MonitoredResources;
 
 public class MonitoredResourcesListArguments : SubscriptionArguments

@@ -12,23 +12,32 @@ public partial class DatadogService : BaseAzureService, IDatadogService
 
     public async Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
     {
-        var tenantId = await ResolveTenantIdAsync(null);
-        var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);
-
-        var resourceId = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Datadog/monitors/{datadogResource}";
-
-        ResourceIdentifier id = new ResourceIdentifier(resourceId);
-        var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
-        var monitoredResources = datadogMonitorResource.GetMonitoredResources();
-
-        var resourceList = new List<string>();
-        foreach (var resource in monitoredResources)
+        try
         {
-            var resourceIdSegments = resource.Id.ToString().Split('/');
-            var lastSegment = resourceIdSegments[^1];
-            resourceList.Add(lastSegment);
-        }
+            var tenantId = await ResolveTenantIdAsync(null);
+            var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);
 
-        return resourceList;
+            var resourceId = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Datadog/monitors/{datadogResource}";
+
+            ResourceIdentifier id = new ResourceIdentifier(resourceId);
+            var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
+            var monitoredResources = datadogMonitorResource.GetMonitoredResources();
+
+            var resourceList = new List<string>();
+            foreach (var resource in monitoredResources)
+            {
+                var resourceIdSegments = resource.Id.ToString().Split('/');
+                var lastSegment = resourceIdSegments[^1];
+                resourceList.Add(lastSegment);
+            }
+
+            return resourceList;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            throw;
+        }
     }
+
 }

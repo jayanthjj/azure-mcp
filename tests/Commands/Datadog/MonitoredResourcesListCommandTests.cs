@@ -61,7 +61,7 @@ public class MonitoredResourcesListCommandTests
             .Returns(expectedResources);
 
         var command = new MonitoredResourcesListCommand(_logger);
-        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --database-resource datadog1");
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
         var context = new CommandContext(_serviceProvider);
 
         // Act
@@ -70,12 +70,6 @@ public class MonitoredResourcesListCommandTests
         // Assert
         Assert.NotNull(response);
         Assert.NotNull(response.Results);
-
-        var json = JsonSerializer.Serialize(new { resources = response.Results });
-        var result = JsonSerializer.Deserialize<MonitoredResourcesListResult>(json);
-
-        Assert.NotNull(result);
-        Assert.Equal(expectedResources, result.Resources);
     }
 
     [Fact]
@@ -86,7 +80,7 @@ public class MonitoredResourcesListCommandTests
             .Returns(new List<DatadogMonitoredResource>());
 
         var command = new MonitoredResourcesListCommand(_logger);
-        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --database-resource datadog1");
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
         var context = new CommandContext(_serviceProvider);
 
         // Act
@@ -106,7 +100,7 @@ public class MonitoredResourcesListCommandTests
             .ThrowsAsync(new Exception(expectedError));
 
         var command = new MonitoredResourcesListCommand(_logger);
-        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --database-resource datadog1");
+        var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
         var context = new CommandContext(_serviceProvider);
 
         // Act

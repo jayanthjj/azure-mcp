@@ -3,6 +3,7 @@ using System.CommandLine.Parsing;
 using AzureMcp.Arguments.Datadog.MonitoredResources;
 using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
+using AzureMcp.Models.Datadog;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -58,7 +59,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             }
 
             var service = context.GetService<IDatadogService>();
-            var results = await service.ListMonitoredResources(
+            List<DatadogMonitoredResource> results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
                 args.DatadogResource!);
@@ -82,5 +83,5 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             .WithValueAccessor(args => args.DatadogResource ?? string.Empty)
             .WithIsRequired(true);
 
-    internal record MonitoredResourcesListResult(List<string> resources);
+    internal record MonitoredResourcesListResult(List<DatadogMonitoredResource> resources);
 }

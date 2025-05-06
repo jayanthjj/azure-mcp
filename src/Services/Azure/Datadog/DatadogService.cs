@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Azure.ResourceManager.Datadog;
+using AzureMcp.Models.Datadog;
 using AzureMcp.Services.Interfaces;
 
 namespace AzureMcp.Services.Azure.Datadog;
@@ -10,7 +11,7 @@ public partial class DatadogService : BaseAzureService, IDatadogService
     {
     }
 
-    public async Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
+    public async Task<List<DatadogMonitoredResource>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
     {
         try
         {
@@ -21,22 +22,22 @@ public partial class DatadogService : BaseAzureService, IDatadogService
 
             ResourceIdentifier id = new ResourceIdentifier(resourceId);
             var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
-            var monitoredResources = datadogMonitorResource.GetMonitoredResources();
+            var monitoredResourcesRaw = datadogMonitorResource.GetMonitoredResources();
 
-            var resourceList = new List<string>();
-            foreach (var resource in monitoredResources)
+            var monitoredResources = monitoredResourcesRaw.Select(resource => new DatadogMonitoredResource
             {
-                var resourceIdSegments = resource.Id.ToString().Split('/');
-                var lastSegment = resourceIdSegments[^1];
-                resourceList.Add(lastSegment);
-            }
+                Id = resource.Id?.ToString(),
+                SendingMetrics = resource.SendingMetrics,
+                ReasonForMetricsStatus = resource.ReasonForMetricsStatus,
+                SendingLogs = resource.SendingLogs,
+                ReasonForLogsStatus = resource.ReasonForLogsStatus
+            }).Take(25).ToList();
 
-            return resourceList;
+            return monitoredResources;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            throw;
+            throw new Exception($"Error listing monitored resources: {ex.Message}", ex);
         }
     }
 

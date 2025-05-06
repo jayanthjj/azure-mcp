@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using AzureMcp.Arguments.Datadog.MonitoredResources;
 using AzureMcp.Commands.Datadog.MonitoredResources;
 using AzureMcp.Models.Command;
+using AzureMcp.Models.Datadog;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -37,8 +38,25 @@ public class MonitoredResourcesListCommandTests
     [Fact]
     public async Task ExecuteAsync_ReturnsResources_WhenResourcesExist()
     {
-        // Arrange
-        var expectedResources = new List<string> { "resource1", "resource2" };
+        var expectedResources = new List<DatadogMonitoredResource>
+        {
+            new DatadogMonitoredResource
+            {
+                Id = "/subscriptions/1234/resourceGroups/rg-demo/providers/Microsoft.Datadog/monitors/app-demo-1",
+                SendingMetrics = true,
+                ReasonForMetricsStatus = "CapturedByRules",
+                SendingLogs = true,
+                ReasonForLogsStatus = "CapturedByRules"
+            },
+            new DatadogMonitoredResource
+            {
+                Id = "/subscriptions/1234/resourceGroups/rg-demo/providers/Microsoft.Datadog/monitors/vm-demo-2",
+                SendingMetrics = false,
+                ReasonForMetricsStatus = "NotCapturedByRules",
+                SendingLogs = true,
+                ReasonForLogsStatus = "CapturedByRules"
+            }
+        };
         _datadogService.ListMonitoredResources(Arg.Is("rg1"), Arg.Is("sub123"), Arg.Is("datadog1"))
             .Returns(expectedResources);
 
@@ -65,7 +83,7 @@ public class MonitoredResourcesListCommandTests
     {
         // Arrange
         _datadogService.ListMonitoredResources("rg1", "sub123", "datadog1")
-            .Returns(new List<string>());
+            .Returns(new List<DatadogMonitoredResource>());
 
         var command = new MonitoredResourcesListCommand(_logger);
         var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --database-resource datadog1");
@@ -103,6 +121,6 @@ public class MonitoredResourcesListCommandTests
     private class MonitoredResourcesListResult
     {
         [JsonPropertyName("resources")]
-        public List<string> Resources { get; set; } = new();
+        public List<DatadogMonitoredResource> Resources { get; set; } = new();
     }
 }

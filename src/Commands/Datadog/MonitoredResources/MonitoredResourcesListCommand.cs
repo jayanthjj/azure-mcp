@@ -17,8 +17,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     protected override string GetCommandDescription() =>
     $"""
-    List monitored resources in Datadog for a datadog resource taken as input from the user. If a long list is returned,
-    truncate and show top 20 results for the same. Give option to filter out rest of them.
+    List monitored resources in Datadog for a datadog resource taken as input from the user. 
        Required arguments:
        - subscription: The name of the Azure subscription
        - resource-group: The name of the Azure resource group

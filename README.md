@@ -115,6 +115,9 @@ The Azure MCP Server provides tools for interacting with the following Azure ser
 ### 🚌 Azure Service Bus
 - Examine properties and runtime information about queues, topics, and subscriptions
 
+### ⚙️ Azure Native ISV Services
+- List Monitored Resources in a Datadog Instance
+
 ### 🔧 Azure CLI Extension
 - Execute Azure CLI commands directly
 - Support for all Azure CLI functionality

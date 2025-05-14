@@ -77,9 +77,16 @@
 /src/Commands/KeyVault/                @conniey @JonathanCrd
 /src/Services/Azure/KeyVault/          @conniey @JonathanCrd
 
-# ServiceLabel: %area-KeyVault
-# ServiceOwners:                       @conniey @JonathanCrd
+# ServiceLabel: %area-Monitor
+# ServiceOwners:                       @smritiy @srnagar @jongio
 
+# PRLabel: %area-ISV
+/src/Arguments/AzureISV/               @jayanthjj @pachaturevedi
+/src/Commands/AzureISV/                @jayanthjj @pachaturevedi
+/src/Services/Azure/AzureISV/          @jayanthjj @pachaturevedi
+
+# ServiceLabel: %areaISV
+# ServiceOwners:                       @jayanthjj @pachaturevedi
 
 # PRLabel: %area-Kusto
 /src/Options/Kusto/                    @danield137 @xiangyan99

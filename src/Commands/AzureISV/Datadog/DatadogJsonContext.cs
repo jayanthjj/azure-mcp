@@ -6,6 +6,4 @@ namespace AzureMcp.Commands.AzureISV.Datadog;
 [JsonSerializable(typeof(MonitoredResourcesListCommand.MonitoredResourcesListResult))]
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
-internal sealed partial class DatadogJsonContext : JsonSerializerContext
-{
-}
+internal sealed partial class DatadogJsonContext : JsonSerializerContext;

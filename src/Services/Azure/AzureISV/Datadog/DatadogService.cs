@@ -22,7 +22,9 @@ public partial class DatadogService( ISubscriptionService subscriptionService) :
 
             ResourceIdentifier id = new ResourceIdentifier(resourceId);
             var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
+            var datadogMonitor = await datadogMonitorResource.GetAsync();
             var monitoredResources = datadogMonitorResource.GetMonitoredResources();
+            
 
             var resourceList = new List<string>();
             foreach (var resource in monitoredResources)
@@ -73,38 +75,84 @@ public partial class DatadogService( ISubscriptionService subscriptionService) :
         }
     }
 
+    //public async Task<DatadogMonitorResourceModel> GetDatadogMonitorResourceData(string resourceGroup, string subscription, string datadogResource)
+    //{
+    //    try
+    //    {
+    //        var tenantId = await ResolveTenantIdAsync(null);
+    //        var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);
+
+    //        var resourceId = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Datadog/monitors/{datadogResource}";
+
+    //        ResourceIdentifier id = new ResourceIdentifier(resourceId);
+    //        var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
+
+    //        var datadogMonitor = await datadogMonitorResource.GetAsync();
+
+    //        if (datadogMonitor.Value.Data != null)
+    //        {
+    //            var _data = datadogMonitor.Value.Data;
+    //            var model = new DatadogMonitorResourceModel
+    //            {
+    //                Id = _data.Id?.ToString(),
+    //                Name = _data.Name,
+    //                Location = _data.Location.ToString(),
+    //                Tags = _data.Tags,
+    //                SkuName = _data.SkuName,
+    //                Properties = _data.Properties,
+    //            };
+
+    //            return model;
+    //        }
+
+    //        return new DatadogMonitorResourceModel();
+
+    //    }
+    //    catch (UriFormatException uriEx)
+    //    {
+    //        throw new Exception($"URI format error: {uriEx.Message}", uriEx);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw new Exception($"Error retrieving Datadog monitor resource data: {ex.Message}", ex);
+    //    }
+    //}
+
     public async Task<DatadogMonitorResourceModel> GetDatadogMonitorResourceData(string resourceGroup, string subscription, string datadogResource)
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(subscription) || string.IsNullOrWhiteSpace(resourceGroup) || string.IsNullOrWhiteSpace(datadogResource))
+                throw new ArgumentException("Invalid parameters: subscription, resourceGroup, or datadogResource is null or empty.");
+
             var tenantId = await ResolveTenantIdAsync(null);
             var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);
 
             var resourceId = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Datadog/monitors/{datadogResource}";
+            Console.WriteLine($"ResourceId: {resourceId}");
 
             ResourceIdentifier id = new ResourceIdentifier(resourceId);
             var datadogMonitorResource = armClient.GetDatadogMonitorResource(id);
+
+            Console.WriteLine($"Parsed ID - Subscription: {id.SubscriptionId}, ResourceGroup: {id.ResourceGroupName}, Name: {id.Name}");
 
             var datadogMonitor = await datadogMonitorResource.GetAsync();
 
             if (datadogMonitor.Value.Data != null)
             {
                 var _data = datadogMonitor.Value.Data;
-                var model = new DatadogMonitorResourceModel
+                return new DatadogMonitorResourceModel
                 {
-                    Id = _data.Id?.ToString(),
+                    //Id = _data.Id?.ToString(),
                     Name = _data.Name,
                     Location = _data.Location.ToString(),
                     Tags = _data.Tags,
                     SkuName = _data.SkuName,
                     Properties = _data.Properties,
                 };
-
-                return model;
             }
 
             return new DatadogMonitorResourceModel();
-
         }
         catch (UriFormatException uriEx)
         {
@@ -115,4 +163,5 @@ public partial class DatadogService( ISubscriptionService subscriptionService) :
             throw new Exception($"Error retrieving Datadog monitor resource data: {ex.Message}", ex);
         }
     }
+
 }

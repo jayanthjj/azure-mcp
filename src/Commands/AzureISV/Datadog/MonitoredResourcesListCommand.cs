@@ -56,25 +56,25 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             }
 
             var service = context.GetService<IDatadogService>();
-            // List<string> results = await service.ListMonitoredResources(
-            //     args.ResourceGroup!,
-            //     args.Subscription!,
-            //     args.DatadogResource!);
+            //List<string> results = await service.ListMonitoredResources(
+            //    args.ResourceGroup!,
+            //    args.Subscription!,
+            //    args.DatadogResource!);
 
-            // List<string> results = await service.ListDatadogResources(args.Subscription!);
+             List<string> results = await service.ListDatadogResources(args.Subscription!);
 
-            DatadogMonitorResourceModel results = await service.GetDatadogMonitorResourceData(
-                args.ResourceGroup!,
-                args.Subscription!,
-                args.DatadogResource!);
+            //DatadogMonitorResourceModel results = await service.GetDatadogMonitorResourceData(
+            //    args.ResourceGroup!,
+            //    args.Subscription!,
+            //    args.DatadogResource!);
 
-            // context.Response.Results = results?.Count > 0 ?
-            //     ResponseResult.Create(new MonitoredResourcesListResult(results),
-            //     DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
-
-            context.Response.Results = results!=null ?
+            context.Response.Results = results?.Count > 0 ?
                 ResponseResult.Create(new MonitoredResourcesListResult(results),
                 DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
+
+            //context.Response.Results = results != null ?
+            //    ResponseResult.Create(new MonitoredResourcesListResult(results),
+            //    DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
         }
         catch (Exception ex)
         {
@@ -91,5 +91,5 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             .WithValueAccessor(args => args.DatadogResource ?? string.Empty)
             .WithIsRequired(true);
 
-    internal record MonitoredResourcesListResult(DatadogMonitorResourceModel resources);
+    internal record MonitoredResourcesListResult(List<string> resources);
 }

@@ -10,7 +10,7 @@ public partial class DatadogService : BaseAzureService, IDatadogService
     {
     }
 
-    public async Task<List<String>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
+    public async Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource)
     {
         try
         {

@@ -35,7 +35,7 @@ public class MonitoredResourcesListCommandTests
     [Fact]
     public async Task ExecuteAsync_ReturnsResources_WhenResourcesExist()
     {
-        var expectedResources = new List<String>
+        var expectedResources = new List<string>
         {
             "/subscriptions/1234/resourceGroups/rg-demo/providers/Microsoft.Datadog/monitors/app-demo-1",
             "/subscriptions/1234/resourceGroups/rg-demo/providers/Microsoft.Datadog/monitors/vm-demo-2"
@@ -60,7 +60,7 @@ public class MonitoredResourcesListCommandTests
     {
         // Arrange
         _datadogService.ListMonitoredResources("rg1", "sub123", "datadog1")
-            .Returns(new List<String>());
+            .Returns(new List<string>());
 
         var command = new MonitoredResourcesListCommand(_logger);
         var args = command.GetCommand().Parse($"--subscription sub123 --resource-group rg1 --datadog-resource datadog1");
@@ -98,6 +98,6 @@ public class MonitoredResourcesListCommandTests
     private class MonitoredResourcesListResult
     {
         [JsonPropertyName("resources")]
-        public List<String> Resources { get; set; } = new();
+        public List<string> Resources { get; set; } = new();
     }
 }

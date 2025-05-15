@@ -55,7 +55,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             }
 
             var service = context.GetService<IDatadogService>();
-            List<String> results = await service.ListMonitoredResources(
+            List<string> results = await service.ListMonitoredResources(
                 args.ResourceGroup!,
                 args.Subscription!,
                 args.DatadogResource!);
@@ -79,5 +79,5 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             .WithValueAccessor(args => args.DatadogResource ?? string.Empty)
             .WithIsRequired(true);
 
-    internal record MonitoredResourcesListResult(List<String> resources);
+    internal record MonitoredResourcesListResult(List<string> resources);
 }

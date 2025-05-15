@@ -1,3 +1,6 @@
+using AzureMcp.Arguments;
+using AzureMcp.Models.AzureISV.Datadog;
+
 namespace AzureMcp.Services.Interfaces;
 
 public interface IDatadogService
@@ -11,5 +14,9 @@ public interface IDatadogService
     /// <returns>A list of monitored resources.</returns>
     /// <exception cref="AuthenticationFailedException">Thrown when authentication fails.</exception>
     /// <exception cref="RequestFailedException">Thrown when the service request fails.</exception>
-    Task<List<String>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource);
+    Task<List<string>> ListMonitoredResources(string resourceGroup, string subscription, string datadogResource);
+
+    Task<List<string>> ListDatadogResources(string subscription, RetryPolicyArguments? retryPolicy = null);
+
+    Task<DatadogMonitorResourceModel> GetDatadogMonitorResourceData(string resourceGroup, string subscription, string datadogResource);
 }

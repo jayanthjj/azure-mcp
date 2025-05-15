@@ -3,6 +3,7 @@ using System.CommandLine.Parsing;
 using AzureMcp.Arguments.AzureISV.Datadog;
 using AzureMcp.Commands.AzureISV.Datadog;
 using AzureMcp.Models.Argument;
+using AzureMcp.Models.AzureISV.Datadog;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -55,12 +56,23 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             }
 
             var service = context.GetService<IDatadogService>();
-            List<String> results = await service.ListMonitoredResources(
+            // List<string> results = await service.ListMonitoredResources(
+            //     args.ResourceGroup!,
+            //     args.Subscription!,
+            //     args.DatadogResource!);
+
+            // List<string> results = await service.ListDatadogResources(args.Subscription!);
+
+            DatadogMonitorResourceModel results = await service.GetDatadogMonitorResourceData(
                 args.ResourceGroup!,
                 args.Subscription!,
                 args.DatadogResource!);
 
-            context.Response.Results = results?.Count > 0 ?
+            // context.Response.Results = results?.Count > 0 ?
+            //     ResponseResult.Create(new MonitoredResourcesListResult(results),
+            //     DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
+
+            context.Response.Results = results!=null ?
                 ResponseResult.Create(new MonitoredResourcesListResult(results),
                 DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
         }
@@ -79,5 +91,5 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
             .WithValueAccessor(args => args.DatadogResource ?? string.Empty)
             .WithIsRequired(true);
 
-    internal record MonitoredResourcesListResult(List<String> resources);
+    internal record MonitoredResourcesListResult(DatadogMonitorResourceModel resources);
 }

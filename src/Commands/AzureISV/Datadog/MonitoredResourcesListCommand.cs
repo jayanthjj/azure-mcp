@@ -9,19 +9,25 @@ using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
+using ModelContextProtocol.Server;
 
 namespace AzureMcp.Commands.Datadog.MonitoredResources;
 
 public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
 {
     private readonly ILogger<MonitoredResourcesListCommand> _logger = logger;
+     private const string _commandTitle = "List Monitored Resources in a Datadog Monitor";
 
-    protected override string GetCommandName() => "list";
+    public override string Name => "list";
 
-    protected override string GetCommandDescription() =>
-    $"""
-    List monitored resources in Datadog for a datadog resource taken as input from the user. 
-    """;
+    public override string Description =>
+        """
+        List monitored resources in Datadog for a datadog resource taken as input from the user. 
+        This command retrieves all monitored azure resources available. Requires `datadog-resource`, `resource-group` and `subscription`.
+        Result is a list of monitored resources as a JSON array.
+        """;
+
+    public override string Title => _commandTitle;
 
     private readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
 
@@ -46,6 +52,7 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
         return args;
     }
 
+    [McpServerTool(Destructive = false, ReadOnly = true, Title = _commandTitle)]
     public override async Task<CommandResponse> ExecuteAsync(CommandContext context, ParseResult parseResult)
     {
         var args = BindArguments(parseResult);

@@ -388,7 +388,7 @@ public static class ArgumentDefinitions
 
     public static class Datadog
     {
-        public const string DatadogResourceName = "database-resource";
+        public const string DatadogResourceName = "datadog-resource";
 
         public static readonly ArgumentDefinition<string> DatadogResource = new(
             DatadogResourceName,

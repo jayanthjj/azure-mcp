@@ -19,4 +19,6 @@ public interface IDatadogService
     Task<List<string>> ListDatadogResources(string subscription, RetryPolicyArguments? retryPolicy = null);
 
     Task<DatadogMonitorResourceModel> GetDatadogMonitorResourceData(string resourceGroup, string subscription, string datadogResource);
+
+    Task<ElasticMonitorResourceModel> GetElasticMonitorResourceData(string resourceGroup, string subscription, string elasticResource);
 }

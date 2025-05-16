@@ -1,5 +1,6 @@
 using Azure.Core;
 using Azure.ResourceManager.Datadog;
+using Azure.ResourceManager.Elastic;
 using AzureMcp.Arguments;
 using AzureMcp.Models.AzureISV.Datadog;
 using AzureMcp.Services.Interfaces;
@@ -161,6 +162,52 @@ public partial class DatadogService( ISubscriptionService subscriptionService) :
         catch (Exception ex)
         {
             throw new Exception($"Error retrieving Datadog monitor resource data: {ex.Message}", ex);
+        }
+    }
+
+    public async Task<ElasticMonitorResourceModel> GetElasticMonitorResourceData(string resourceGroup, string subscription, string elasticResource)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(subscription) || string.IsNullOrWhiteSpace(resourceGroup) || string.IsNullOrWhiteSpace(elasticResource))
+                throw new ArgumentException("Invalid parameters: subscription, resourceGroup, or elasticResource is null or empty.");
+
+            var tenantId = await ResolveTenantIdAsync(null);
+            var armClient = await CreateArmClientAsync(tenant: tenantId, retryPolicy: null);
+
+            var resourceId = $"/subscriptions/{subscription}/resourceGroups/{resourceGroup}/providers/Microsoft.Elastic/monitors/{elasticResource}";
+            Console.WriteLine($"ResourceId: {resourceId}");
+
+            ResourceIdentifier id = new ResourceIdentifier(resourceId);
+            var elasticMonitorResource = armClient.GetElasticMonitorResource(id);
+
+            Console.WriteLine($"Parsed ID - Subscription: {id.SubscriptionId}, ResourceGroup: {id.ResourceGroupName}, Name: {id.Name}");
+
+            var elasticMonitor = await elasticMonitorResource.GetAsync();
+
+            if (elasticMonitor.Value.Data != null)
+            {
+                var _data = elasticMonitor.Value.Data;
+                return new ElasticMonitorResourceModel
+                {
+                    // Id = _data.Id?.ToString(),
+                    Name = _data.Name,
+                    Location = _data.Location.ToString(),
+                    Tags = _data.Tags,
+                    SkuName = _data.SkuName,
+                    Properties = _data.Properties,
+                };
+            }
+
+            return new ElasticMonitorResourceModel();
+        }
+        catch (UriFormatException uriEx)
+        {
+            throw new Exception($"URI format error: {uriEx.Message}", uriEx);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error retrieving Elastic monitor resource data: {ex.Message}", ex);
         }
     }
 

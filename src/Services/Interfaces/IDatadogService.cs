@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
 namespace AzureMcp.Services.Interfaces;
 
 public interface IDatadogService

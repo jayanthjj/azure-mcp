@@ -85,7 +85,7 @@
 /src/Commands/AzureISV/                @jayanthjj @pachaturevedi
 /src/Services/Azure/AzureISV/          @jayanthjj @pachaturevedi
 
-# ServiceLabel: %areaISV
+# ServiceLabel: %area-ISV
 # ServiceOwners:                       @jayanthjj @pachaturevedi
 
 # PRLabel: %area-Kusto

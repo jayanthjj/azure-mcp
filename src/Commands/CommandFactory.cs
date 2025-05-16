@@ -164,7 +164,7 @@ public class CommandFactory
         var datadog = new CommandGroup("datadog", "Datadog operations - Commands for managing and querying Datadog resources.");
         _rootGroup.AddSubGroup(datadog);
 
-        var monitoredResources = new CommandGroup("monitored-resources", "Datadog monitored resources operations - Commands for listing monitored resources in a specific Datadog monitor.");
+        var monitoredResources = new CommandGroup("monitoredresources", "Datadog monitored resources operations - Commands for listing monitored resources in a specific Datadog monitor.");
         datadog.AddSubGroup(monitoredResources);
 
         monitoredResources.AddCommand("list", new Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<Datadog.MonitoredResources.MonitoredResourcesListCommand>()));

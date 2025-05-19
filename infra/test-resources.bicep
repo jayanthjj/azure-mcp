@@ -75,3 +75,13 @@ module servicebus 'services/servicebus.bicep' = {
     testApplicationOid: testApplicationOid
   }
 }
+
+module azureIsv 'services/azureIsv.bicep' = {
+  name: '${deploymentName}-azureIsv'
+  params: {
+    baseName: baseName
+    location: location
+    tenantId: tenantId
+    testApplicationOid: testApplicationOid
+  }
+}

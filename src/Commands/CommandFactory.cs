@@ -167,7 +167,7 @@ public class CommandFactory
         var monitoredResources = new CommandGroup("monitoredresources", "Datadog monitored resources operations - Commands for listing monitored resources in a specific Datadog monitor.");
         datadog.AddSubGroup(monitoredResources);
 
-        monitoredResources.AddCommand("list", new Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<Datadog.MonitoredResources.MonitoredResourcesListCommand>()));
+        monitoredResources.AddCommand("list", new AzureIsv.Datadog.MonitoredResources.MonitoredResourcesListCommand(GetLogger<AzureIsv.Datadog.MonitoredResources.MonitoredResourcesListCommand>()));
     }
 
     private void RegisterPostgresCommands()

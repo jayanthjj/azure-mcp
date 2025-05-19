@@ -2,9 +2,9 @@
 // Licensed under the MIT License.
 
 using System.Text.Json.Serialization;
-using AzureMcp.Commands.Datadog.MonitoredResources;
+using AzureMcp.Commands.AzureIsv.Datadog.MonitoredResources;
 
-namespace AzureMcp.Commands.AzureISV.Datadog;
+namespace AzureMcp.Commands.AzureIsv.Datadog;
 
 [JsonSerializable(typeof(MonitoredResourcesListCommand.MonitoredResourcesListResult))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]

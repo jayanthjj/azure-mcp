@@ -4,7 +4,7 @@
 using System.Text.Json.Serialization;
 using AzureMcp.Models.Argument;
 
-namespace AzureMcp.Arguments.AzureISV.Datadog;
+namespace AzureMcp.Arguments.AzureIsv.Datadog;
 
 public class MonitoredResourcesListArguments : SubscriptionArguments
 {

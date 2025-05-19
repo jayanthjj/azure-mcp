@@ -5,7 +5,7 @@ using Azure.Core;
 using Azure.ResourceManager.Datadog;
 using AzureMcp.Services.Interfaces;
 
-namespace AzureMcp.Services.Azure.AzureISV.Datadog;
+namespace AzureMcp.Services.Azure.AzureIsv.Datadog;
 
 public partial class DatadogService : BaseAzureService, IDatadogService
 {

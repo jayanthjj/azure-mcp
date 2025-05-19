@@ -81,9 +81,9 @@
 # ServiceOwners:                       @smritiy @srnagar @jongio
 
 # PRLabel: %area-ISV
-/src/Arguments/AzureISV/               @jayanthjj @pachaturevedi
-/src/Commands/AzureISV/                @jayanthjj @pachaturevedi
-/src/Services/Azure/AzureISV/          @jayanthjj @pachaturevedi
+/src/Arguments/AzureIsv/               @jayanthjj @pachaturevedi
+/src/Commands/AzureIsv/                @jayanthjj @pachaturevedi
+/src/Services/Azure/AzureIsv/          @jayanthjj @pachaturevedi
 
 # ServiceLabel: %area-ISV
 # ServiceOwners:                       @jayanthjj @pachaturevedi

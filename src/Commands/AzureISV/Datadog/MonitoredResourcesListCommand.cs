@@ -3,15 +3,14 @@
 
 using System.CommandLine;
 using System.CommandLine.Parsing;
-using AzureMcp.Arguments.AzureISV.Datadog;
-using AzureMcp.Commands.AzureISV.Datadog;
+using AzureMcp.Arguments.AzureIsv.Datadog;
 using AzureMcp.Models.Argument;
 using AzureMcp.Models.Command;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Server;
 
-namespace AzureMcp.Commands.Datadog.MonitoredResources;
+namespace AzureMcp.Commands.AzureIsv.Datadog.MonitoredResources;
 
 public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
 {

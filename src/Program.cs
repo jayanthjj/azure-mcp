@@ -4,7 +4,7 @@
 using System.CommandLine.Builder;
 using AzureMcp.Commands;
 using AzureMcp.Services.Azure.AppConfig;
-using AzureMcp.Services.Azure.AzureISV.Datadog;
+using AzureMcp.Services.Azure.AzureIsv.Datadog;
 using AzureMcp.Services.Azure.Cosmos;
 using AzureMcp.Services.Azure.KeyVault;
 using AzureMcp.Services.Azure.Kusto;

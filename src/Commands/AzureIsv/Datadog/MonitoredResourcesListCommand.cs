@@ -15,7 +15,7 @@ namespace AzureMcp.Commands.AzureIsv.Datadog.MonitoredResources;
 public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
 {
     private readonly ILogger<MonitoredResourcesListCommand> _logger = logger;
-     private const string _commandTitle = "List Monitored Resources in a Datadog Monitor";
+    private const string _commandTitle = "List Monitored Resources in a Datadog Monitor";
 
     public override string Name => "list";
 
@@ -69,9 +69,15 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
                 args.Subscription!,
                 args.DatadogResource!);
 
-            context.Response.Results = results?.Count > 0 ?
-                ResponseResult.Create(new MonitoredResourcesListResult(results),
-                DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
+            // context.Response.Results = results?.Count > 0 ?
+            //     ResponseResult.Create(new MonitoredResourcesListResult(results),
+            //     DatadogJsonContext.Default.MonitoredResourcesListResult) : null;
+
+            context.Response.Results = results?.Count > 0 ? ResponseResult.Create(new MonitoredResourcesListResult(results),
+                                                            DatadogJsonContext.Default.MonitoredResourcesListResult)
+                                                            : ResponseResult.Create(new MonitoredResourcesListResult(
+                                                            ["No monitored resources found for the specified Datadog resource."]),
+                                                            DatadogJsonContext.Default.MonitoredResourcesListResult);
         }
         catch (Exception ex)
         {

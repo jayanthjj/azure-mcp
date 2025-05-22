@@ -95,3 +95,13 @@ module kusto 'services/kusto.bicep' = {
     testApplicationOid: testApplicationOid
   }
 }
+
+module azureIsv 'services/azureIsv.bicep' = if (tenantId == '70a036f6-8e4d-4615-bad6-149c02e7720d') {
+  name: '${deploymentName}-azureIsv'
+  params: {
+    baseName: baseName
+    location: 'west2' //This is the only supported location for the Datadog monitor
+    tenantId: tenantId
+    testApplicationOid: testApplicationOid
+  }
+}

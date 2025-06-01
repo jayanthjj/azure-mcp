@@ -77,8 +77,8 @@
 /src/Commands/KeyVault/                @conniey @JonathanCrd
 /src/Services/Azure/KeyVault/          @conniey @JonathanCrd
 
-# ServiceLabel: %area-Monitor
-# ServiceOwners:                       @smritiy @srnagar @jongio
+# ServiceLabel: %area-KeyVault
+# ServiceOwners:                       @conniey @JonathanCrd
 
 # PRLabel: %area-ISV
 /src/Arguments/AzureIsv/               @jayanthjj @pachaturevedi

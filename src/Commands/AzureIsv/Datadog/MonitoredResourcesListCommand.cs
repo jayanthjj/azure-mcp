@@ -3,19 +3,21 @@
 
 using System.CommandLine;
 using System.CommandLine.Parsing;
-using AzureMcp.Arguments.AzureIsv.Datadog;
-using AzureMcp.Models.Argument;
+using AzureMcp.Commands.Subscription;
 using AzureMcp.Models.Command;
+using AzureMcp.Models.Option;
+using AzureMcp.Options.AzureIsv.Datadog;
 using AzureMcp.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using ModelContextProtocol.Server;
 
 namespace AzureMcp.Commands.AzureIsv.Datadog.MonitoredResources;
 
-public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListArguments>()
+public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesListCommand> logger) : SubscriptionCommand<MonitoredResourcesListOptions>
 {
-    private readonly ILogger<MonitoredResourcesListCommand> _logger = logger;
     private const string _commandTitle = "List Monitored Resources in a Datadog Monitor";
+    private readonly ILogger<MonitoredResourcesListCommand> _logger = logger;
+    private readonly Option<string> _datadogResourceOption = OptionDefinitions.Datadog.DatadogResourceName;
 
     public override string Name => "list";
 
@@ -28,67 +30,45 @@ public sealed class MonitoredResourcesListCommand(ILogger<MonitoredResourcesList
 
     public override string Title => _commandTitle;
 
-    private readonly Option<string> _datadogResourceOption = ArgumentDefinitions.Datadog.DatadogResource.ToOption();
-
     protected override void RegisterOptions(Command command)
     {
         base.RegisterOptions(command);
         command.AddOption(_datadogResourceOption);
         command.AddOption(_resourceGroupOption);
     }
-    protected override void RegisterArguments()
-    {
-        base.RegisterArguments();
-        AddArgument(CreateDatadogResourceArgument());
-        AddArgument(CreateResourceGroupArgument());
-    }
 
-    protected override MonitoredResourcesListArguments BindArguments(ParseResult parseResult)
+    protected override MonitoredResourcesListOptions BindOptions(ParseResult parseResult)
     {
-        var args = base.BindArguments(parseResult);
-        args.DatadogResource = parseResult.GetValueForOption(_datadogResourceOption);
-        args.ResourceGroup = parseResult.GetValueForOption(_resourceGroupOption);
-        return args;
+        var options = base.BindOptions(parseResult);
+        options.DatadogResource = parseResult.GetValueForOption(_datadogResourceOption);
+        options.ResourceGroup = parseResult.GetValueForOption(_resourceGroupOption);
+        return options;
     }
 
     [McpServerTool(Destructive = false, ReadOnly = true, Title = _commandTitle)]
     public override async Task<CommandResponse> ExecuteAsync(CommandContext context, ParseResult parseResult)
     {
-        var args = BindArguments(parseResult);
-
+        var options = BindOptions(parseResult);
         try
         {
-            if (!await ProcessArguments(context, args))
-            {
-                return context.Response;
-            }
-
             var service = context.GetService<IDatadogService>();
             List<string> results = await service.ListMonitoredResources(
-                args.ResourceGroup!,
-                args.Subscription!,
-                args.DatadogResource!);
-            
-            context.Response.Results = results?.Count > 0 ? ResponseResult.Create(new MonitoredResourcesListResult(results),
-                                                            DatadogJsonContext.Default.MonitoredResourcesListResult)
-                                                            : ResponseResult.Create(new MonitoredResourcesListResult(
-                                                            ["No monitored resources found for the specified Datadog resource."]),
-                                                            DatadogJsonContext.Default.MonitoredResourcesListResult);
+                options.ResourceGroup!,
+                options.Subscription!,
+                options.DatadogResource!);
+            context.Response.Results = results?.Count > 0
+                ? ResponseResult.Create(new MonitoredResourcesListResult(results), DatadogJsonContext.Default.MonitoredResourcesListResult)
+                : ResponseResult.Create(new MonitoredResourcesListResult([
+                    "No monitored resources found for the specified Datadog resource."]), DatadogJsonContext.Default.MonitoredResourcesListResult);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while executing the command.");
-            HandleException(context.Response, ex);
+            context.Response.Status = 500;
+            context.Response.Message = ex.Message;
         }
-
         return context.Response;
     }
-
-    private static ArgumentBuilder<MonitoredResourcesListArguments> CreateDatadogResourceArgument() =>
-        ArgumentBuilder<MonitoredResourcesListArguments>
-            .Create(ArgumentDefinitions.Datadog.DatadogResource.Name, ArgumentDefinitions.Datadog.DatadogResource.Description)
-            .WithValueAccessor(args => args.DatadogResource ?? string.Empty)
-            .WithIsRequired(true);
 
     internal record MonitoredResourcesListResult(List<string> resources);
 }

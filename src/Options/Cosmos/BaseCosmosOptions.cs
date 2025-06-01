@@ -11,3 +11,5 @@ public class BaseCosmosOptions : SubscriptionOptions
     [JsonPropertyName(OptionDefinitions.Cosmos.AccountName)]
     public string? Account { get; set; }
 }
+
+

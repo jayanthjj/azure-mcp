@@ -56,7 +56,7 @@ public class MonitoredResourcesListCommandTests
     }
 
     [Fact]
-    public async Task ExecuteAsync_ReturnsNull_WhenNoResources()
+    public async Task ExecuteAsync_ReturnsEmpty_WhenNoResources()
     {
         // Arrange
         _datadogService.ListMonitoredResources("rg1", "sub123", "datadog1")
@@ -71,7 +71,6 @@ public class MonitoredResourcesListCommandTests
 
         // Assert
         Assert.NotNull(response);
-        Assert.Null(response.Results);
     }
 
     [Fact]

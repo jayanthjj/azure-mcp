@@ -4,7 +4,7 @@ targetScope = 'resourceGroup'
 param baseName string = resourceGroup().name
 
 @description('The location for the Datadog monitor')
-param location string = 'westus2'
+param location string
 
 @description('The tenant ID to which the application and resources belong.')
 param tenantId string

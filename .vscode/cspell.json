@@ -164,6 +164,7 @@
         "LINUXPOOL",
         "LINUXVMIMAGE",
         "LLM",
+        "monitoredresources",
         "msal",
         "mysvc",
         "mycluster",
@@ -175,6 +176,7 @@
         "npmjs",
         "onboarded",
         "oidc",
+        "payg",
         "pscore",
         "RediSearch",
         "resourcegroup",
@@ -187,8 +189,6 @@
         "WINDOWSOS",
         "WINDOWSPOOL",
         "WINDOWSVMIMAGE",
-        "Xunit",
-        "monitoredresources",
-        "payg"
+        "Xunit"
     ]
 }

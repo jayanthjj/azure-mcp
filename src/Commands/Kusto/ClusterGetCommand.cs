@@ -7,15 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureMcp.Commands.Kusto;
 
-public sealed class ClusterGetCommand : BaseClusterCommand<ClusterGetOptions>
+public sealed class ClusterGetCommand(ILogger<ClusterGetCommand> logger) : BaseClusterCommand<ClusterGetOptions>
 {
-    private const string _commandTitle = "Get Kusto Cluster Details";
-    private readonly ILogger<ClusterGetCommand> _logger;
-
-    public ClusterGetCommand(ILogger<ClusterGetCommand> logger)
-    {
-        _logger = logger;
-    }
+    private const string CommandTitle = "Get Kusto Cluster Details";
+    private readonly ILogger<ClusterGetCommand> _logger = logger;
 
     public override string Name => "get";
 
@@ -25,9 +20,9 @@ public sealed class ClusterGetCommand : BaseClusterCommand<ClusterGetOptions>
         The response includes the `clusterUri` property for use in subsequent commands.
         """;
 
-    public override string Title => _commandTitle;
+    public override string Title => CommandTitle;
 
-    [McpServerTool(Destructive = false, ReadOnly = true)]
+    [McpServerTool(Destructive = false, ReadOnly = true, Title = CommandTitle)]
     public override async Task<CommandResponse> ExecuteAsync(CommandContext context, ParseResult parseResult)
     {
         var options = BindOptions(parseResult);

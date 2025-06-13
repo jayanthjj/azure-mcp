@@ -8,16 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureMcp.Commands.Kusto;
 
-public sealed class QueryCommand : BaseDatabaseCommand<QueryOptions>
+public sealed class QueryCommand(ILogger<QueryCommand> logger) : BaseDatabaseCommand<QueryOptions>()
 {
-    private const string _commandTitle = "Query Kusto Database";
-    private readonly ILogger<QueryCommand> _logger;
+    private const string CommandTitle = "Query Kusto Database";
+    private readonly ILogger<QueryCommand> _logger = logger;
     private readonly Option<string> _queryOption = OptionDefinitions.Kusto.Query;
-
-    public QueryCommand(ILogger<QueryCommand> logger) : base()
-    {
-        _logger = logger;
-    }
 
     protected override void RegisterOptions(Command command)
     {
@@ -41,9 +36,9 @@ public sealed class QueryCommand : BaseDatabaseCommand<QueryOptions>
         Results are returned as a JSON array of documents, for example: `[{'Column1': val1, 'Column2': val2}, ...]`.
         """;
 
-    public override string Title => _commandTitle;
+    public override string Title => CommandTitle;
 
-    [McpServerTool(Destructive = false, ReadOnly = true, Title = _commandTitle)]
+    [McpServerTool(Destructive = false, ReadOnly = true, Title = CommandTitle)]
     public override async Task<CommandResponse> ExecuteAsync(CommandContext context, ParseResult parseResult)
     {
         var options = BindOptions(parseResult);

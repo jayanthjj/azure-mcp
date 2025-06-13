@@ -1,14 +1,27 @@
 # Release History
 
-## 0.1.2 (Unreleased)
-
-### Features Added
-
-### Breaking Changes
+## 0.2.1 (2025-06-12)
 
 ### Bugs Fixed
 
-### Other Changes
+- Fixed the issue where queries containing double quotes failed to execute. https://github.com/Azure/azure-mcp/pull/338
+- Enables dynamic proxy mode within single "azure" tool. https://github.com/Azure/azure-mcp/pull/325
+
+## 0.2.0 (2025-06-09)
+
+### Features Added
+
+- Support for launching smaller service level MCP servers. https://github.com/Azure/azure-mcp/pull/324
+
+### Bugs Fixed
+
+- Fixed failure starting Docker image. https://github.com/Azure/azure-mcp/pull/301
+
+## 0.1.2 (2025-06-03)
+
+### Bugs Fixed
+
+- Monitor Query Logs Failing.  Fixed with https://github.com/Azure/azure-mcp/pull/280
 
 ## 0.1.1 (2025-05-30)
 

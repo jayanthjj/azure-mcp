@@ -20,7 +20,7 @@ public class CommandFactory
     private readonly CommandGroup _rootGroup;
     private readonly ModelsJsonContext _srcGenWithOptions;
 
-    internal static readonly char Separator = '-';
+    internal const char Separator = '-';
 
     /// <summary>
     /// Mapping of tokenized command names to their <see cref="IBaseCommand" />
@@ -64,6 +64,18 @@ public class CommandFactory
 
     public IReadOnlyDictionary<string, IBaseCommand> AllCommands => _commandMap;
 
+    public IReadOnlyDictionary<string, IBaseCommand> GroupCommands(string groupName)
+    {
+        foreach (CommandGroup group in _rootGroup.SubGroup)
+        {
+            if (string.Equals(group.Name, groupName, StringComparison.OrdinalIgnoreCase))
+            {
+                return CreateCommmandDictionary(group, string.Empty);
+            }
+        }
+
+        throw new KeyNotFoundException($"Group '{groupName}' not found in command groups.");
+    }
 
     private void RegisterCommandGroup()
     {
@@ -187,6 +199,7 @@ public class CommandFactory
         server.AddCommand("list", new Postgres.Server.ServerListCommand(GetLogger<Postgres.Server.ServerListCommand>()));
         server.AddCommand("config", new Postgres.Server.GetConfigCommand(GetLogger<Postgres.Server.GetConfigCommand>()));
         server.AddCommand("param", new Postgres.Server.GetParamCommand(GetLogger<Postgres.Server.GetParamCommand>()));
+        server.AddCommand("setparam", new Postgres.Server.SetParamCommand(GetLogger<Postgres.Server.SetParamCommand>()));
     }
 
     private void RegisterStorageCommands()

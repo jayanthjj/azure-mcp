@@ -189,6 +189,7 @@ public static class OptionDefinitions
         public const string TableName = "table";
         public const string QueryText = "query";
         public const string ParamName = "param";
+        public const string ValueName = "value";
 
         public static readonly Option<string> User = new(
             $"--{UserName}",
@@ -233,6 +234,14 @@ public static class OptionDefinitions
         public static readonly Option<string> Param = new(
             $"--{ParamName}",
             "The PostgreSQL parameter to be accessed."
+        )
+        {
+            IsRequired = true
+        };
+
+        public static readonly Option<string> Value = new(
+            $"--{ValueName}",
+            "The value to set for the PostgreSQL parameter."
         )
         {
             IsRequired = true
@@ -360,6 +369,7 @@ public static class OptionDefinitions
     {
         public const string TransportName = "transport";
         public const string PortName = "port";
+        public const string ServiceName = "service";
 
         public static readonly Option<string> Transport = new(
             $"--{TransportName}",
@@ -377,6 +387,15 @@ public static class OptionDefinitions
         )
         {
             IsRequired = false
+        };
+
+        public static readonly Option<string?> ServiceType = new(
+            $"--{ServiceName}",
+            () => null,
+            "The service to expose on the MCP server."
+        )
+        {
+            IsRequired = false,
         };
     }
 

@@ -8,15 +8,10 @@ using Microsoft.Extensions.Logging;
 
 namespace AzureMcp.Commands.Kusto;
 
-public sealed class ClusterListCommand : SubscriptionCommand<ClusterListOptions>
+public sealed class ClusterListCommand(ILogger<ClusterListCommand> logger) : SubscriptionCommand<ClusterListOptions>()
 {
-    private const string _commandTitle = "List Kusto Clusters";
-    private readonly ILogger<ClusterListCommand> _logger;
-
-    public ClusterListCommand(ILogger<ClusterListCommand> logger) : base()
-    {
-        _logger = logger;
-    }
+    private const string CommandTitle = "List Kusto Clusters";
+    private readonly ILogger<ClusterListCommand> _logger = logger;
 
     public override string Name => "list";
 
@@ -27,9 +22,9 @@ public sealed class ClusterListCommand : SubscriptionCommand<ClusterListOptions>
         Result is a list of cluster names as a JSON array.
         """;
 
-    public override string Title => _commandTitle;
+    public override string Title => CommandTitle;
 
-    [McpServerTool(Destructive = true, ReadOnly = false, Title = _commandTitle)]
+    [McpServerTool(Destructive = true, ReadOnly = false, Title = CommandTitle)]
     public override async Task<CommandResponse> ExecuteAsync(CommandContext context, ParseResult parseResult)
     {
         var options = BindOptions(parseResult);

@@ -1,5 +1,17 @@
 # Release History
 
+## 0.2.2 (Unreleased)
+
+### Features Added
+
+- Support for Azure ISV Services https://github.com/Azure/azure-mcp/pull/199/
+
+### Breaking Changes
+
+### Bugs Fixed
+
+### Other Changes
+
 ## 0.2.1 (2025-06-12)
 
 ### Bugs Fixed
